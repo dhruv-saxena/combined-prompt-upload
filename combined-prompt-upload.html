@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1280">
-<title>Let's build your first deck</title>
+<title>Let's create your first presentation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -20,8 +20,8 @@
     --text-white: #ffffff;
     --border-primary: rgba(26, 26, 26, 0.2);
     --border-subtle: rgba(26, 26, 26, 0.1);
-    --border-brand: #ff5500;
-    --border-brand-secondary: #ffb48f;
+    --border-brand: #171717;
+    --border-brand-secondary: rgba(26, 26, 26, 0.15);
     --shadow-drop-1: rgba(26, 26, 26, 0.03);
     --shadow-drop-2: rgba(26, 26, 26, 0.06);
     --shadow-inner-1: rgba(255, 255, 255, 0.8);
@@ -81,7 +81,7 @@
   /* ---------- Heading ---------- */
   .heading-block {
     position: absolute;
-    left: 340px; top: 84px; width: 600px;
+    left: 340px; top: 64px; width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -96,12 +96,12 @@
     text-align: center;
     white-space: pre-wrap;
   }
-  .heading .muted { color: #a3a3a3; }
+  .heading .muted { color: #7a7a7a; }
 
   /* ---------- Sample prompts (label + ticker) ---------- */
   .examples {
     position: absolute;
-    left: 340px; top: 240px; width: 600px;
+    left: 340px; top: 220px; width: 600px;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -149,7 +149,7 @@
     display: inline-flex;
     gap: 8px;
     width: max-content;
-    animation: ticker-ltr 40s linear infinite;
+    animation: ticker-ltr 70s linear infinite;
   }
   .ticker:hover .ticker-track { animation-play-state: paused; }
   @keyframes ticker-ltr {
@@ -182,7 +182,7 @@
   /* ---------- Prompt box ---------- */
   .prompt-area {
     position: absolute;
-    left: 340px; top: 328px;
+    left: 340px; top: 308px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -194,7 +194,7 @@
     height: 240px;
     border-radius: 16px;
     background: var(--bg-elevated);
-    padding: 4px;
+    padding: 10px;
     box-shadow:
       0 0 0 0.75px var(--border-brand),
       0 0 0 2px var(--border-brand-secondary),
@@ -220,46 +220,69 @@
     justify-content: space-between;
     gap: 16px;
   }
-  .placeholder-row {
+  .prompt-input {
+    display: block;
+    width: 100%;
+    min-height: 60px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .prompt-input::placeholder {
+    color: transparent;
+  }
+
+  /* Custom two-line hint with icons */
+  .custom-placeholder {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    pointer-events: none;
     display: flex;
-    align-items: flex-start;
-    flex: 1;
-    min-width: 0;
-  }
-  .cursor {
-    display: inline-block;
-    width: 1.5px;
-    height: 20px;
-    margin-top: 2px;
-    background: #171717;
-    animation: blink 1s steps(2, start) infinite;
-  }
-  @keyframes blink { to { visibility: hidden; } }
-  .placeholder-text {
-    font-size: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    font-size: 20px;
     line-height: 1.5;
     color: var(--text-tertiary);
-    max-width: 340px;
+    transition: opacity 0.2s ease;
+  }
+  .placeholder-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .placeholder-line svg { flex-shrink: 0; }
+  .prompt-inner:has(.prompt-input:not(:placeholder-shown)) .custom-placeholder {
+    opacity: 0;
   }
   .prompt-drop-hint {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    height: 28px;
-    padding: 0 10px;
+    height: 36px;
+    padding: 0 14px;
     border-radius: 8px;
     background: #ffffff;
     border: 1.5px dashed rgba(26, 26, 26, 0.2);
-    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
     font-weight: 500;
-    color: var(--text-secondary);
+    line-height: 1.43;
+    color: var(--text-primary);
     cursor: pointer;
-    font-family: inherit;
-    transition: border-color .15s, color .15s;
+    transition: border-color .15s;
   }
   .prompt-drop-hint:hover {
     border-color: rgba(26, 26, 26, 0.35);
-    color: var(--text-primary);
   }
   .upload-arrow {
     animation: upload-arrow-bounce 1.4s ease-in-out infinite;
@@ -274,6 +297,13 @@
   @keyframes upload-bracket-bounce {
     0%, 100% { transform: translateY(0); }
     50%      { transform: translateY(0.6px); }
+  }
+  .cta-arrow {
+    animation: cta-arrow-nudge 1.4s ease-in-out infinite;
+  }
+  @keyframes cta-arrow-nudge {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(3px); }
   }
 
   /* ---------- Toolbar ---------- */
@@ -328,128 +358,93 @@
       0 0 0 1px var(--shadow-drop-1),
       0 1px 2px 0 var(--shadow-drop-2);
   }
-  .btn-continue.btn-icon-only { width: 52px; }
+  .btn-continue.btn-icon-only { width: 72px; }
+  .btn-continue.btn-icon-only svg { width: 20px; height: 20px; }
+  .btn-continue .trailing-icon svg { width: 18px; height: 18px; }
+
+  /* Arrow button visible only when the prompt has content */
+  .prompt-area > .btn-continue {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .prompt-area:has(.prompt-input:not(:placeholder-shown)) > .btn-continue {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
   /* ---------- Iteration divider ---------- */
   .iterations {
     border-top: 1px solid var(--border-subtle);
+  }
+
+  /* ---------- Iteration 3: toolbar above, chips inside ---------- */
+  .toolbar-above {
+    position: absolute;
+    left: 340px;
+    top: 190px;
+    width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .toolbar-above .toolbar-left,
+  .toolbar-above .toolbar-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .ticker-bottom {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+
+  /* ---------- Intro sequence (main screen only) ----------
+     Staggered, overlapping fades. Each step starts before the previous
+     one finishes, with a slow ease-out so each fade feels graceful. */
+  .anim-intro {
+    opacity: 0;
+    display: inline-block;
+    transform: translateY(40px);
+    animation: intro-show-hide 8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .anim-action {
+    opacity: 0;
+    display: inline-block;
+    transform: translateY(40px);
+    animation: fade-up 1.5s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
+  }
+  .anim-rest {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fade-up 1.5s cubic-bezier(0.16, 1, 0.3, 1) 1.6s forwards;
+  }
+  .anim-rest-2 {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fade-up 1.5s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes intro-show-hide {
+    0%   { opacity: 0; transform: translateY(40px); }  /* 0s   — start below */
+    19%  { opacity: 1; transform: translateY(0); }     /* 1.5s — in place */
+    50%  { opacity: 1; transform: translateY(0); }     /* 4s   — still visible */
+    100% { opacity: 0; transform: translateY(0); }     /* 8s   — fade out, no drift */
   }
 </style>
 </head>
 <body>
   <div class="page">
 
-    <!-- =============== MAIN SCREEN =============== -->
-    <div class="main-screen">
-
-      <!-- Top bar -->
-      <div class="top-bar">
-        <button class="icon-btn" aria-label="Back">
-          <svg viewBox="0 0 20 20" fill="none"><path d="M12.5 4.375L6.875 10L12.5 15.625" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="icon-btn" aria-label="Close">
-          <svg viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-
-      <!-- Heading -->
-      <div class="heading-block">
-        <p class="heading"><span class="muted">Let's build your first deck.</span><br>Enter a prompt, or upload a file.</p>
-      </div>
-
-      <!-- Sample prompts -->
-      <div class="examples">
-        <div class="sample-row">
-          <span class="sample-label">Prompts curated for you</span>
-          <div class="ticker">
-            <div class="ticker-track">
-              <button class="pill"><span class="pill-emoji">💼</span>Marketing Performance Review</button>
-              <button class="pill"><span class="pill-emoji">🧩</span>Board Marketing Update</button>
-              <button class="pill"><span class="pill-emoji">🗓️</span>Annual Marketing Strategy</button>
-              <button class="pill" aria-hidden="true"><span class="pill-emoji">💼</span>Marketing Performance Review</button>
-              <button class="pill" aria-hidden="true"><span class="pill-emoji">🧩</span>Board Marketing Update</button>
-              <button class="pill" aria-hidden="true"><span class="pill-emoji">🗓️</span>Annual Marketing Strategy</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Prompt (type or upload) -->
-      <div class="prompt-area">
-        <div class="prompt">
-          <div class="prompt-inner">
-
-            <div class="prompt-top-row">
-              <div class="placeholder-row">
-                <span class="cursor"></span>
-                <span class="placeholder-text">Describe your deck,<br>or drop your files here</span>
-              </div>
-              <button type="button" class="prompt-drop-hint">
-                <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                  <g class="upload-bracket">
-                    <path d="M3 10V12C3 12.5523 3.44772 13 4 13H12C12.5523 13 13 12.5523 13 12V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </g>
-                  <g class="upload-arrow">
-                    <path d="M8 10V3M8 3L5 6M8 3L11 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </g>
-                </svg>
-                <span>PDF, DOCX or PPT</span>
-              </button>
-            </div>
-
-            <div class="bottom-toolbar">
-              <button class="btn">
-                <span class="leading-icon">
-                  <svg viewBox="0 0 14 14" fill="none">
-                    <path d="M7 1.5L1.75 4L7 6.5L12.25 4L7 1.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
-                    <path d="M1.75 7L7 9.5L12.25 7" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
-                    <path d="M1.75 10L7 12.5L12.25 10" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
-                  </svg>
-                </span>
-                <span>Slides: Auto</span>
-                <span class="trailing-icon">
-                  <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
-              </button>
-              <button class="btn">
-                <span class="leading-icon">
-                  <svg viewBox="0 0 14 14" fill="none">
-                    <path d="M7 2.5C5.6 2.5 4.5 3.5 4.5 4.8C3.6 5 3 5.8 3 6.7C3 7.5 3.5 8.2 4.2 8.4V9.5C4.2 10.3 4.9 11 5.7 11H8.3C9.1 11 9.8 10.3 9.8 9.5V8.4C10.5 8.2 11 7.5 11 6.7C11 5.8 10.4 5 9.5 4.8C9.5 3.5 8.4 2.5 7 2.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
-                    <path d="M7 2.8V11" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-                  </svg>
-                </span>
-                <span>Standard</span>
-                <span class="trailing-icon">
-                  <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
-              </button>
-              <button class="btn btn-icon-only" aria-label="Settings">
-                <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
-                  <line x1="2" y1="3.5" x2="12" y2="3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                  <line x1="2" y1="10.5" x2="12" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                  <circle cx="9" cy="3.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
-                  <circle cx="5" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
-                </svg>
-              </button>
-            </div>
-
-            <div class="bottom-toolbar-right">
-              <button class="btn btn-continue btn-icon-only" aria-label="Build my deck">
-                <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
-                  <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- =============== ITERATION (no sample prompts) =============== -->
-    <section class="iterations">
-      <div class="main-screen iteration-screen">
+    <!-- =============== MAIN SCREEN (toolbar above, chips inside) =============== -->
+    <div class="main-screen iteration-3-screen">
 
         <!-- Top bar -->
         <div class="top-bar">
@@ -463,21 +458,15 @@
 
         <!-- Heading -->
         <div class="heading-block">
-          <p class="heading"><span class="muted">Let's build your first deck.</span><br>Enter a prompt, or upload a file.</p>
+          <p class="heading"><span class="muted anim-intro">Let's create your first presentation</span><br><span class="anim-action">Describe your deck, or upload a file</span></p>
         </div>
 
-        <!-- Prompt (type or upload) — no sample prompts above -->
-        <div class="prompt-area" style="top: 208px;">
-          <div class="prompt">
-            <div class="prompt-inner">
-
-              <div class="prompt-top-row">
-                <div class="placeholder-row">
-                  <span class="cursor"></span>
-                  <span class="placeholder-text">Describe your deck,<br>or drop your files here</span>
-                </div>
-                <button type="button" class="prompt-drop-hint">
-                  <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+        <!-- Toolbar above the prompt box -->
+        <div class="toolbar-above anim-rest">
+          <div class="toolbar-left">
+            <button type="button" class="btn">
+              <span class="leading-icon">
+                <svg viewBox="0 0 16 16" fill="none">
                   <g class="upload-bracket">
                     <path d="M3 10V12C3 12.5523 3.44772 13 4 13H12C12.5523 13 13 12.5523 13 12V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                   </g>
@@ -485,60 +474,104 @@
                     <path d="M8 10V3M8 3L5 6M8 3L11 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                   </g>
                 </svg>
-                  <span>PDF, DOCX or PPT</span>
-                </button>
-              </div>
-
-              <div class="bottom-toolbar">
-                <button class="btn">
-                  <span class="leading-icon">
-                    <svg viewBox="0 0 14 14" fill="none">
-                      <path d="M7 1.5L1.75 4L7 6.5L12.25 4L7 1.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
-                      <path d="M1.75 7L7 9.5L12.25 7" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
-                      <path d="M1.75 10L7 12.5L12.25 10" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
-                    </svg>
-                  </span>
-                  <span>Slides: Auto</span>
-                  <span class="trailing-icon">
-                    <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </span>
-                </button>
-                <button class="btn">
-                  <span class="leading-icon">
-                    <svg viewBox="0 0 14 14" fill="none">
-                      <path d="M7 2.5C5.6 2.5 4.5 3.5 4.5 4.8C3.6 5 3 5.8 3 6.7C3 7.5 3.5 8.2 4.2 8.4V9.5C4.2 10.3 4.9 11 5.7 11H8.3C9.1 11 9.8 10.3 9.8 9.5V8.4C10.5 8.2 11 7.5 11 6.7C11 5.8 10.4 5 9.5 4.8C9.5 3.5 8.4 2.5 7 2.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
-                      <path d="M7 2.8V11" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-                    </svg>
-                  </span>
-                  <span>Standard</span>
-                  <span class="trailing-icon">
-                    <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </span>
-                </button>
-                <button class="btn btn-icon-only" aria-label="Settings">
-                  <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
-                    <line x1="2" y1="3.5" x2="12" y2="3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                    <line x1="2" y1="10.5" x2="12" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-                    <circle cx="9" cy="3.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
-                    <circle cx="5" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
-                  </svg>
-                </button>
-              </div>
-
-              <div class="bottom-toolbar-right">
-                <button class="btn btn-continue btn-icon-only" aria-label="Build my deck">
-                <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
-                  <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </span>
+              <span>Upload Files</span>
+              <span class="trailing-icon">
+                <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn">
+              <span class="leading-icon">
+                <svg viewBox="0 0 14 14" fill="none">
+                  <path d="M7 1.5L1.75 4L7 6.5L12.25 4L7 1.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                  <path d="M1.75 7L7 9.5L12.25 7" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+                  <path d="M1.75 10L7 12.5L12.25 10" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
                 </svg>
-              </button>
+              </span>
+              <span>Slide Count</span>
+              <span class="trailing-icon">
+                <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <button class="btn">
+              <span class="leading-icon">
+                <svg viewBox="0 0 14 14" fill="none">
+                  <path d="M7 2.5C5.6 2.5 4.5 3.5 4.5 4.8C3.6 5 3 5.8 3 6.7C3 7.5 3.5 8.2 4.2 8.4V9.5C4.2 10.3 4.9 11 5.7 11H8.3C9.1 11 9.8 10.3 9.8 9.5V8.4C10.5 8.2 11 7.5 11 6.7C11 5.8 10.4 5 9.5 4.8C9.5 3.5 8.4 2.5 7 2.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                  <path d="M7 2.8V11" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span>AI Model</span>
+              <span class="trailing-icon">
+                <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
+            <button class="btn btn-icon-only" aria-label="Settings">
+              <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
+                <line x1="2" y1="3.5" x2="12" y2="3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="2" y1="10.5" x2="12" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <circle cx="9" cy="3.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
+                <circle cx="5" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Prompt with chips ticker inside at the bottom -->
+        <div class="prompt-area anim-rest-2" style="top: 246px;">
+          <div class="prompt">
+            <div class="prompt-inner">
+
+              <div class="custom-placeholder">
+                <div class="placeholder-line">
+                  <svg viewBox="0 0 20 20" fill="none" width="20" height="20">
+                    <path d="M13 3l4 4-10 10H3v-4l10-10z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>Type here or</span>
+                </div>
+                <div class="placeholder-line">
+                  <svg viewBox="0 0 20 20" fill="none" width="20" height="20">
+                    <g class="upload-bracket">
+                      <path d="M4 13v2.5C4 16.3 4.7 17 5.5 17h9c0.8 0 1.5-0.7 1.5-1.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                    <g class="upload-arrow">
+                      <path d="M10 13V3M10 3L6.5 6.5M10 3L13.5 6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                  </svg>
+                  <span>drop in a file</span>
+                </div>
+              </div>
+              <textarea class="prompt-input" placeholder=" " rows="2" autofocus></textarea>
+
+              <div class="ticker ticker-bottom">
+                <div class="ticker-track">
+                  <button class="pill"><span class="pill-emoji">💼</span>Marketing Performance Review</button>
+                  <button class="pill"><span class="pill-emoji">🧩</span>Board Marketing Update</button>
+                  <button class="pill"><span class="pill-emoji">🗓️</span>Annual Marketing Strategy</button>
+                  <button class="pill" aria-hidden="true"><span class="pill-emoji">💼</span>Marketing Performance Review</button>
+                  <button class="pill" aria-hidden="true"><span class="pill-emoji">🧩</span>Board Marketing Update</button>
+                  <button class="pill" aria-hidden="true"><span class="pill-emoji">🗓️</span>Annual Marketing Strategy</button>
+                </div>
               </div>
 
             </div>
           </div>
+
+          <!-- Submit button centered below the box -->
+          <button class="btn btn-continue">
+            <span>Create Presentation</span>
+            <span class="trailing-icon">
+              <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+                <g class="cta-arrow">
+                  <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+              </svg>
+            </span>
+          </button>
         </div>
 
-      </div>
-    </section>
+    </div>
 
   </div>
 </body>

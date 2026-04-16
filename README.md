@@ -1,15 +1,6 @@
 # Combined prompt + upload
 
-A single prompt box that invites the user to **either type a prompt or drop a document** — replacing the older "type OR upload" split where those were two separate affordances.
-
-## Overview
-
-The page shows two variants stacked, separated by a thin divider:
-
-| Variant | Purpose |
-|---|---|
-| Primary (top) | The default screen with the **sample-prompts ticker** above the input. |
-| Clean (bottom) | The same layout **without sample prompts** — for teams who want a simpler first-run view. |
+A single prompt box that invites the user to type a prompt **or** drop in a file — replacing what used to be a separate text box and upload button.
 
 ## Getting started
 
@@ -18,89 +9,55 @@ python3 -m http.server 8765
 open http://localhost:8765/combined-prompt-upload.html
 ```
 
----
+## Layout
 
-## Components
+A single 1280×720 screen. Content is centered in a 600px column.
 
-### 1. Top bar
+- **Top bar** — back and close icon buttons.
+- **Heading** — two centered lines: *Let's create your first presentation* (grey) and *Describe your deck, or upload a file* (black).
+- **Toolbar above the box** — Upload Files on the left · Slides / Standard / Settings on the right.
+- **Prompt box** — outer black border + inner dashed frame signal the whole area is a drop target.
+  - Auto-focused textarea at the top
+  - Two-line placeholder: pencil icon + *Type here or* · upload icon + *drop in a file*
+  - Sample-prompts ticker inside, at the bottom
+- **Create Presentation →** — wide dark button below the box; **hidden until something is typed**.
 
-- Back button (left) and close button (right).
-- Progress indicator from the original Figma was dropped — it wasn't earning its space at this step.
+## Behaviours
 
-### 2. Heading
-
-Two lines, centered:
-
-> **Let's build your first deck.** *(grey)*
-> **Enter a prompt, or upload a file.** *(black)*
-
-The grey lead-in adds personality without needing a subtitle.
-
-### 3. Sample prompts ticker
-
-- Label **"PROMPTS CURATED FOR YOU"** between two faded horizontal dividers.
-- Chips auto-scroll **right-to-left** at `40s / cycle` — slow enough not to distract.
-- **Hover pauses** the ticker.
-- Edges fade into the background via a CSS mask.
-- Each chip is a clickable starter prompt.
-
-### 4. Prompt box
-
-The main input. Uses a **dashed inner frame** to signal the entire area is a drop target — type to write, or drop a file anywhere inside.
-
-#### 4a. Upload chip (top-right)
-
-The `PDF, DOCX or PPT` pill inside the prompt box.
-
-**Purpose**
-Secondary affordance to the text input. Tells the user which file types are accepted, and gives a clickable shortcut to the file picker without needing to drag.
-
-**Visual style**
-
-| Property | Value |
+| Trigger | What happens |
 |---|---|
-| Shape | Small dashed pill (echoes the drop-zone frame) |
-| Fill | White |
-| Border | `1.5px dashed rgba(26, 26, 26, 0.2)` |
-| Text | 12px, secondary grey, uppercase off |
-| Position | Top-right of the box, 12px from edges |
+| Page load | Textarea auto-focuses, native cursor blinks |
+| Page load | Cascade reveals the screen (see Animations) |
+| User types | Custom placeholder fades out; *Create Presentation* fades in |
+| User clears text | Placeholder returns; CTA fades back out |
+| Hover the ticker | Chip ticker pauses |
+| Hover any toolbar button | Border darkens slightly |
 
-**Hover state**
+## Animations
 
-- Border darkens → `rgba(26, 26, 26, 0.35)`
-- Text darkens → primary
-- No background or heavy shadow — keeps it calm.
+### Entrance cascade (runs once on page load)
 
-**Micro-interaction — the "lift"**
+| Element | Start | Duration | Travel |
+|---|---|---|---|
+| Intro line ("Let's create…") | 0s | 1.5s | 40px ↑ |
+| Action line ("Describe your deck…") | 1.2s | 1.5s | 40px ↑ |
+| Toolbar above the box | 1.6s | 1.5s | 40px ↑ |
+| Prompt box | 1.8s | 1.5s | 40px ↑ |
+| Intro line slow fade-out | 4.0s → 8.0s | 4s | none |
 
-The upload glyph is built from two independently-animated parts that share a `1.4s ease-in-out infinite` loop:
+Each element starts before the previous one finishes, so the cascade feels overlapping rather than mechanical. Easing is `cubic-bezier(0.16, 1, 0.3, 1)` (snappy ease-out); the intro's lifecycle uses `cubic-bezier(0.4, 0, 0.2, 1)`.
 
-| Part | Motion | Amplitude |
+### Looping micro-animations
+
+| Element | Motion | Cycle |
 |---|---|---|
-| Arrow | Rises up, then settles | `-3px` |
-| Bracket / tray | Dips down in opposition | `+0.6px` |
+| Upload icon — arrow | Lifts up 3px | 1.4s |
+| Upload icon — bracket | Dips down 0.6px in opposition | 1.4s |
+| CTA arrow | Nudges right 3px | 1.4s |
+| Sample-prompts ticker | Scrolls right-to-left, full loop | 70s |
+| Textarea cursor | Native blink | 1s |
 
-The opposing motion gives the icon a tiny sense of weight and physics — the arrow looks like it's pushing off the tray. The bracket dip is deliberately **subtle** so the arrow remains the focal point. Together they reinforce the "drop here" metaphor without ever becoming noisy.
-
-### 5. Bottom toolbar
-
-| Button | Purpose |
-|---|---|
-| `Slides: Auto ▼` | Slide count / auto |
-| `🧠 Standard ▼` | Thinking-mode / model selector |
-| Settings icon | Advanced controls |
-| `→` *(dark, right)* | Submit — starts generating the deck |
-
-All four sit `12px` from the bottom edge of the box, matching the side padding.
-
----
-
-## Layout notes
-
-- Canvas width: **1280px**.
-- Content column at `left: 340px`, width `600px` — prompt box, heading, and chips share one vertical axis.
-- **All insets inside the prompt box are 12px** (padding, toolbar offsets) so every edge aligns to the same grid.
-- Main screen height: `720px`. Iteration sits directly below, separated only by a 1px divider.
+The two halves of the upload glyph move in opposition so the icon reads as a small "lift and release" — the arrow does the work, the bracket gives slightly under it. The bracket motion is deliberately tiny so the arrow stays the focal point.
 
 ## Files
 
