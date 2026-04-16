@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Let's build your first deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Tokens ---------- */
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #fafafa;
+    --bg-elevated: #ffffff;
+    --bg-secondary-inverted: #171717;
+    --text-primary: #171717;
+    --text-secondary: #525252;
+    --text-tertiary: #a3a3a3;
+    --text-white: #ffffff;
+    --border-primary: rgba(26, 26, 26, 0.2);
+    --border-subtle: rgba(26, 26, 26, 0.1);
+    --border-brand: #ff5500;
+    --border-brand-secondary: #ffb48f;
+    --shadow-drop-1: rgba(26, 26, 26, 0.03);
+    --shadow-drop-2: rgba(26, 26, 26, 0.06);
+    --shadow-inner-1: rgba(255, 255, 255, 0.8);
+  }
+
+  /* ---------- Reset / base ---------- */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ---------- Page structure ---------- */
+  .page {
+    width: 1280px;
+    margin: 0 auto;
+    background: var(--bg-primary);
+  }
+  .main-screen {
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    background: var(--bg-primary);
+  }
+
+  /* ---------- Top bar ---------- */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 80px;
+    background: var(--bg-primary);
+    width: 1280px;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 99px;
+    background: var(--bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow:
+      0 0 0 1px var(--shadow-drop-2),
+      0 1px 2px 1px var(--shadow-drop-1),
+      inset 0 0 0 1px var(--shadow-inner-1);
+  }
+  .icon-btn svg { width: 20px; height: 20px; color: #171717; }
+
+  /* ---------- Heading ---------- */
+  .heading-block {
+    position: absolute;
+    left: 340px; top: 84px; width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .heading {
+    font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.24px;
+    font-weight: 400;
+    color: var(--text-primary);
+    text-align: center;
+    white-space: pre-wrap;
+  }
+  .heading .muted { color: #a3a3a3; }
+
+  /* ---------- Sample prompts (label + ticker) ---------- */
+  .examples {
+    position: absolute;
+    left: 340px; top: 240px; width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  .sample-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .sample-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+  .sample-label::before,
+  .sample-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+  }
+  .sample-label::before {
+    background: linear-gradient(to right, transparent, rgba(26, 26, 26, 0.15));
+  }
+  .sample-label::after {
+    background: linear-gradient(to left, transparent, rgba(26, 26, 26, 0.15));
+  }
+  .ticker {
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+  .ticker-track {
+    display: inline-flex;
+    gap: 8px;
+    width: max-content;
+    animation: ticker-ltr 40s linear infinite;
+  }
+  .ticker:hover .ticker-track { animation-play-state: paused; }
+  @keyframes ticker-ltr {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .pill:hover {
+    border-color: rgba(26, 26, 26, 0.3);
+    box-shadow: 0 1px 2px 0 rgba(26, 26, 26, 0.05);
+  }
+  .pill-emoji { font-size: 15px; line-height: 1; }
+
+  /* ---------- Prompt box ---------- */
+  .prompt-area {
+    position: absolute;
+    left: 340px; top: 328px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .prompt {
+    position: relative;
+    width: 600px;
+    height: 240px;
+    border-radius: 16px;
+    background: var(--bg-elevated);
+    padding: 4px;
+    box-shadow:
+      0 0 0 0.75px var(--border-brand),
+      0 0 0 2px var(--border-brand-secondary),
+      0 0 0 1px var(--shadow-drop-2),
+      0 1px 2px 0 var(--shadow-drop-2),
+      0 4px 6px 0 var(--shadow-drop-2),
+      0 24px 40px -16px var(--shadow-drop-2),
+      inset 0 0 0 1px var(--shadow-inner-1);
+  }
+  .prompt-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-secondary);
+    border: 1.5px dashed rgba(26, 26, 26, 0.2);
+    border-radius: 12px;
+    padding: 12px;
+    overflow: hidden;
+  }
+  .prompt-top-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .placeholder-row {
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+  }
+  .cursor {
+    display: inline-block;
+    width: 1.5px;
+    height: 20px;
+    margin-top: 2px;
+    background: #171717;
+    animation: blink 1s steps(2, start) infinite;
+  }
+  @keyframes blink { to { visibility: hidden; } }
+  .placeholder-text {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-tertiary);
+    max-width: 340px;
+  }
+  .prompt-drop-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1.5px dashed rgba(26, 26, 26, 0.2);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color .15s, color .15s;
+  }
+  .prompt-drop-hint:hover {
+    border-color: rgba(26, 26, 26, 0.35);
+    color: var(--text-primary);
+  }
+  .upload-arrow {
+    animation: upload-arrow-bounce 1.4s ease-in-out infinite;
+  }
+  .upload-bracket {
+    animation: upload-bracket-bounce 1.4s ease-in-out infinite;
+  }
+  @keyframes upload-arrow-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+  }
+  @keyframes upload-bracket-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(0.6px); }
+  }
+
+  /* ---------- Toolbar ---------- */
+  .bottom-toolbar {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .bottom-toolbar-right {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.43;
+    border: none;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow:
+      0 0 0 1px var(--shadow-drop-2),
+      0 1px 2px 1px var(--shadow-drop-1),
+      inset 0 0 0 1px var(--shadow-inner-1);
+  }
+  .btn svg { width: 13px; height: 13px; }
+  .btn .leading-icon { display: inline-flex; align-items: center; padding-right: 6px; }
+  .btn .trailing-icon { display: inline-flex; align-items: center; padding-left: 6px; }
+  .btn-icon-only {
+    width: 36px;
+    padding: 0;
+  }
+  .btn-continue {
+    background: var(--bg-secondary-inverted);
+    color: var(--text-white);
+    box-shadow:
+      0 0 0 1px var(--shadow-drop-1),
+      0 1px 2px 0 var(--shadow-drop-2);
+  }
+  .btn-continue.btn-icon-only { width: 52px; }
+
+  /* ---------- Iteration divider ---------- */
+  .iterations {
+    border-top: 1px solid var(--border-subtle);
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- =============== MAIN SCREEN =============== -->
+    <div class="main-screen">
+
+      <!-- Top bar -->
+      <div class="top-bar">
+        <button class="icon-btn" aria-label="Back">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M12.5 4.375L6.875 10L12.5 15.625" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="Close">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Heading -->
+      <div class="heading-block">
+        <p class="heading"><span class="muted">Let's build your first deck.</span><br>Enter a prompt, or upload a file.</p>
+      </div>
+
+      <!-- Sample prompts -->
+      <div class="examples">
+        <div class="sample-row">
+          <span class="sample-label">Prompts curated for you</span>
+          <div class="ticker">
+            <div class="ticker-track">
+              <button class="pill"><span class="pill-emoji">💼</span>Marketing Performance Review</button>
+              <button class="pill"><span class="pill-emoji">🧩</span>Board Marketing Update</button>
+              <button class="pill"><span class="pill-emoji">🗓️</span>Annual Marketing Strategy</button>
+              <button class="pill" aria-hidden="true"><span class="pill-emoji">💼</span>Marketing Performance Review</button>
+              <button class="pill" aria-hidden="true"><span class="pill-emoji">🧩</span>Board Marketing Update</button>
+              <button class="pill" aria-hidden="true"><span class="pill-emoji">🗓️</span>Annual Marketing Strategy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prompt (type or upload) -->
+      <div class="prompt-area">
+        <div class="prompt">
+          <div class="prompt-inner">
+
+            <div class="prompt-top-row">
+              <div class="placeholder-row">
+                <span class="cursor"></span>
+                <span class="placeholder-text">Describe your deck,<br>or drop your files here</span>
+              </div>
+              <button type="button" class="prompt-drop-hint">
+                <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                  <g class="upload-bracket">
+                    <path d="M3 10V12C3 12.5523 3.44772 13 4 13H12C12.5523 13 13 12.5523 13 12V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
+                  <g class="upload-arrow">
+                    <path d="M8 10V3M8 3L5 6M8 3L11 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
+                </svg>
+                <span>PDF, DOCX or PPT</span>
+              </button>
+            </div>
+
+            <div class="bottom-toolbar">
+              <button class="btn">
+                <span class="leading-icon">
+                  <svg viewBox="0 0 14 14" fill="none">
+                    <path d="M7 1.5L1.75 4L7 6.5L12.25 4L7 1.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                    <path d="M1.75 7L7 9.5L12.25 7" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+                    <path d="M1.75 10L7 12.5L12.25 10" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Slides: Auto</span>
+                <span class="trailing-icon">
+                  <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </button>
+              <button class="btn">
+                <span class="leading-icon">
+                  <svg viewBox="0 0 14 14" fill="none">
+                    <path d="M7 2.5C5.6 2.5 4.5 3.5 4.5 4.8C3.6 5 3 5.8 3 6.7C3 7.5 3.5 8.2 4.2 8.4V9.5C4.2 10.3 4.9 11 5.7 11H8.3C9.1 11 9.8 10.3 9.8 9.5V8.4C10.5 8.2 11 7.5 11 6.7C11 5.8 10.4 5 9.5 4.8C9.5 3.5 8.4 2.5 7 2.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                    <path d="M7 2.8V11" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+                  </svg>
+                </span>
+                <span>Standard</span>
+                <span class="trailing-icon">
+                  <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </button>
+              <button class="btn btn-icon-only" aria-label="Settings">
+                <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
+                  <line x1="2" y1="3.5" x2="12" y2="3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  <line x1="2" y1="10.5" x2="12" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  <circle cx="9" cy="3.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
+                  <circle cx="5" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="bottom-toolbar-right">
+              <button class="btn btn-continue btn-icon-only" aria-label="Build my deck">
+                <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+                  <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =============== ITERATION (no sample prompts) =============== -->
+    <section class="iterations">
+      <div class="main-screen iteration-screen">
+
+        <!-- Top bar -->
+        <div class="top-bar">
+          <button class="icon-btn" aria-label="Back">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M12.5 4.375L6.875 10L12.5 15.625" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="icon-btn" aria-label="Close">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <!-- Heading -->
+        <div class="heading-block">
+          <p class="heading"><span class="muted">Let's build your first deck.</span><br>Enter a prompt, or upload a file.</p>
+        </div>
+
+        <!-- Prompt (type or upload) — no sample prompts above -->
+        <div class="prompt-area" style="top: 208px;">
+          <div class="prompt">
+            <div class="prompt-inner">
+
+              <div class="prompt-top-row">
+                <div class="placeholder-row">
+                  <span class="cursor"></span>
+                  <span class="placeholder-text">Describe your deck,<br>or drop your files here</span>
+                </div>
+                <button type="button" class="prompt-drop-hint">
+                  <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+                  <g class="upload-bracket">
+                    <path d="M3 10V12C3 12.5523 3.44772 13 4 13H12C12.5523 13 13 12.5523 13 12V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
+                  <g class="upload-arrow">
+                    <path d="M8 10V3M8 3L5 6M8 3L11 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
+                </svg>
+                  <span>PDF, DOCX or PPT</span>
+                </button>
+              </div>
+
+              <div class="bottom-toolbar">
+                <button class="btn">
+                  <span class="leading-icon">
+                    <svg viewBox="0 0 14 14" fill="none">
+                      <path d="M7 1.5L1.75 4L7 6.5L12.25 4L7 1.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                      <path d="M1.75 7L7 9.5L12.25 7" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+                      <path d="M1.75 10L7 12.5L12.25 10" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Slides: Auto</span>
+                  <span class="trailing-icon">
+                    <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </button>
+                <button class="btn">
+                  <span class="leading-icon">
+                    <svg viewBox="0 0 14 14" fill="none">
+                      <path d="M7 2.5C5.6 2.5 4.5 3.5 4.5 4.8C3.6 5 3 5.8 3 6.7C3 7.5 3.5 8.2 4.2 8.4V9.5C4.2 10.3 4.9 11 5.7 11H8.3C9.1 11 9.8 10.3 9.8 9.5V8.4C10.5 8.2 11 7.5 11 6.7C11 5.8 10.4 5 9.5 4.8C9.5 3.5 8.4 2.5 7 2.5Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+                      <path d="M7 2.8V11" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span>Standard</span>
+                  <span class="trailing-icon">
+                    <svg viewBox="0 0 13 13" fill="none"><path d="M3.25 4.875L6.5 8.125L9.75 4.875" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </button>
+                <button class="btn btn-icon-only" aria-label="Settings">
+                  <svg viewBox="0 0 14 14" fill="none" width="13" height="13">
+                    <line x1="2" y1="3.5" x2="12" y2="3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    <line x1="2" y1="10.5" x2="12" y2="10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    <circle cx="9" cy="3.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
+                    <circle cx="5" cy="10.5" r="1.6" stroke="currentColor" stroke-width="1.2" fill="#fff"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="bottom-toolbar-right">
+                <button class="btn btn-continue btn-icon-only" aria-label="Build my deck">
+                <svg viewBox="0 0 20 20" fill="none" width="16" height="16">
+                  <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
