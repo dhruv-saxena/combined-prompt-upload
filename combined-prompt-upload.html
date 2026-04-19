@@ -118,47 +118,7 @@
   }
   .heading .muted { color: #7a7a7a; }
 
-  /* ---------- Sample prompts (label + ticker) ---------- */
-  .examples {
-    position: absolute;
-    left: 340px; top: 220px; width: 600px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    align-items: flex-start;
-  }
-  .sample-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-  }
-  .sample-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: var(--text-tertiary);
-    white-space: nowrap;
-  }
-  .sample-label::before,
-  .sample-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-  }
-  .sample-label::before {
-    background: linear-gradient(to right, transparent, rgba(26, 26, 26, 0.15));
-  }
-  .sample-label::after {
-    background: linear-gradient(to left, transparent, rgba(26, 26, 26, 0.15));
-  }
+  /* ---------- Ticker (sample prompts) ---------- */
   .ticker {
     width: 100%;
     overflow: hidden;
@@ -248,12 +208,6 @@
     padding: 12px;
     overflow: hidden;
   }
-  .prompt-top-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-  }
   .prompt-input {
     display: block;
     width: 100%;
@@ -298,26 +252,6 @@
   .prompt-inner:has(.prompt-input:not(:placeholder-shown)) .custom-placeholder {
     opacity: 0;
   }
-  .prompt-drop-hint {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    height: 36px;
-    padding: 0 14px;
-    border-radius: 8px;
-    background: #ffffff;
-    border: 1.5px dashed rgba(26, 26, 26, 0.2);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.43;
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: border-color .15s;
-  }
-  .prompt-drop-hint:hover {
-    border-color: rgba(26, 26, 26, 0.35);
-  }
   .btn-continue:hover .cta-arrow {
     animation: cta-arrow-nudge 1.1s ease-in-out infinite;
   }
@@ -328,22 +262,6 @@
   }
 
   /* ---------- Toolbar ---------- */
-  .bottom-toolbar {
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  .bottom-toolbar-right {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
   .btn {
     display: inline-flex;
     align-items: center;
@@ -403,8 +321,6 @@
     outline: 2px solid #171717;
     outline-offset: 3px;
   }
-  .btn-continue.btn-icon-only { width: 72px; }
-  .btn-continue.btn-icon-only svg { width: 20px; height: 20px; }
   .btn-continue .trailing-icon svg { width: 18px; height: 18px; }
 
   /* Arrow button visible only when the prompt has content */
@@ -431,12 +347,7 @@
     transform: translateY(0.5px);
   }
 
-  /* ---------- Iteration divider ---------- */
-  .iterations {
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  /* ---------- Iteration 3: toolbar above, chips inside ---------- */
+/* ---------- Iteration 3: toolbar above, chips inside ---------- */
   .toolbar-above {
     position: absolute;
     left: 340px;
@@ -724,7 +635,7 @@
   <div class="page">
 
     <!-- =============== MAIN SCREEN (toolbar above, chips inside) =============== -->
-    <div class="main-screen iteration-3-screen">
+    <div class="main-screen">
 
         <!-- Top bar -->
         <div class="top-bar">
