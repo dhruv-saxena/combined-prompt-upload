@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1280">
-<title>Let's create your first presentation</title>
+<title>Dhruv, let's build your first presentation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -25,6 +25,11 @@
     --shadow-drop-1: rgba(26, 26, 26, 0.03);
     --shadow-drop-2: rgba(26, 26, 26, 0.06);
     --shadow-inner-1: rgba(255, 255, 255, 0.8);
+
+    /* Motion */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-quick: 140ms;
+    --dur-reveal: 320ms;
   }
 
   /* ---------- Reset / base ---------- */
@@ -75,6 +80,21 @@
       0 0 0 1px var(--shadow-drop-2),
       0 1px 2px 1px var(--shadow-drop-1),
       inset 0 0 0 1px var(--shadow-inner-1);
+    transition: box-shadow var(--dur-quick) var(--ease-out),
+                background var(--dur-quick) var(--ease-out),
+                transform 100ms var(--ease-out);
+  }
+  .icon-btn:hover {
+    background: var(--bg-secondary);
+    box-shadow:
+      0 0 0 1px rgba(26, 26, 26, 0.12),
+      0 1px 3px 0 rgba(26, 26, 26, 0.08),
+      inset 0 0 0 1px var(--shadow-inner-1);
+  }
+  .icon-btn:active { transform: translateY(0.5px); }
+  .icon-btn:focus-visible {
+    outline: 2px solid #171717;
+    outline-offset: 2px;
   }
   .icon-btn svg { width: 20px; height: 20px; color: #171717; }
 
@@ -144,6 +164,12 @@
     overflow: hidden;
     mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    transition: opacity var(--dur-reveal) var(--ease-out);
+  }
+  /* Ticker recedes once the user commits to typing, so the CTA owns the eye.
+     Scoped to .demo-complete so it doesn't fight the pre-demo hidden state. */
+  body.demo-complete .prompt-inner:has(.prompt-input:not(:placeholder-shown)) .ticker {
+    opacity: 0.4;
   }
   .ticker-track {
     display: inline-flex;
@@ -171,11 +197,19 @@
     white-space: nowrap;
     cursor: pointer;
     font-family: inherit;
-    transition: border-color .15s, box-shadow .15s;
+    transition: border-color var(--dur-quick) var(--ease-out),
+                box-shadow var(--dur-quick) var(--ease-out),
+                transform var(--dur-quick) var(--ease-out);
   }
   .pill:hover {
     border-color: rgba(26, 26, 26, 0.3);
-    box-shadow: 0 1px 2px 0 rgba(26, 26, 26, 0.05);
+    box-shadow: 0 2px 6px -1px rgba(26, 26, 26, 0.08);
+    transform: translateY(-1px);
+  }
+  .pill:active { transform: translateY(0); }
+  .pill:focus-visible {
+    outline: 2px solid #171717;
+    outline-offset: 2px;
   }
   .pill-emoji { font-size: 15px; line-height: 1; }
 
@@ -253,7 +287,7 @@
     font-size: 20px;
     line-height: 1.5;
     color: var(--text-tertiary);
-    transition: opacity 0.2s ease;
+    transition: opacity 180ms var(--ease-out);
   }
   .placeholder-line {
     display: flex;
@@ -284,26 +318,13 @@
   .prompt-drop-hint:hover {
     border-color: rgba(26, 26, 26, 0.35);
   }
-  .upload-arrow {
-    animation: upload-arrow-bounce 1.4s ease-in-out infinite;
-  }
-  .upload-bracket {
-    animation: upload-bracket-bounce 1.4s ease-in-out infinite;
-  }
-  @keyframes upload-arrow-bounce {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-3px); }
-  }
-  @keyframes upload-bracket-bounce {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(0.6px); }
-  }
-  .cta-arrow {
-    animation: cta-arrow-nudge 1.4s ease-in-out infinite;
+  .btn-continue:hover .cta-arrow {
+    animation: cta-arrow-nudge 1.1s ease-in-out infinite;
   }
   @keyframes cta-arrow-nudge {
     0%, 100% { transform: translateX(0); }
-    50%      { transform: translateX(3px); }
+    45%      { transform: translateX(5px); }
+    55%      { transform: translateX(5px); }
   }
 
   /* ---------- Toolbar ---------- */
@@ -343,6 +364,20 @@
       0 0 0 1px var(--shadow-drop-2),
       0 1px 2px 1px var(--shadow-drop-1),
       inset 0 0 0 1px var(--shadow-inner-1);
+    transition: box-shadow var(--dur-quick) var(--ease-out),
+                background var(--dur-quick) var(--ease-out),
+                transform 100ms var(--ease-out);
+  }
+  .btn:hover {
+    box-shadow:
+      0 0 0 1px rgba(26, 26, 26, 0.18),
+      0 1px 2px 1px var(--shadow-drop-1),
+      inset 0 0 0 1px var(--shadow-inner-1);
+  }
+  .btn:active { transform: translateY(0.5px); }
+  .btn:focus-visible {
+    outline: 2px solid #171717;
+    outline-offset: 2px;
   }
   .btn svg { width: 13px; height: 13px; }
   .btn .leading-icon { display: inline-flex; align-items: center; padding-right: 6px; }
@@ -358,6 +393,16 @@
       0 0 0 1px var(--shadow-drop-1),
       0 1px 2px 0 var(--shadow-drop-2);
   }
+  .btn-continue:hover {
+    background: #0a0a0a;
+    box-shadow:
+      0 0 0 1px var(--shadow-drop-1),
+      0 4px 12px -2px rgba(26, 26, 26, 0.22);
+  }
+  .btn-continue:focus-visible {
+    outline: 2px solid #171717;
+    outline-offset: 3px;
+  }
   .btn-continue.btn-icon-only { width: 72px; }
   .btn-continue.btn-icon-only svg { width: 20px; height: 20px; }
   .btn-continue .trailing-icon svg { width: 18px; height: 18px; }
@@ -365,12 +410,25 @@
   /* Arrow button visible only when the prompt has content */
   .prompt-area > .btn-continue {
     opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
     pointer-events: none;
-    transition: opacity 0.25s ease;
+    transition: opacity var(--dur-reveal) var(--ease-out),
+                transform var(--dur-reveal) var(--ease-out),
+                filter var(--dur-reveal) var(--ease-out),
+                background var(--dur-quick) var(--ease-out),
+                box-shadow var(--dur-quick) var(--ease-out);
   }
-  .prompt-area:has(.prompt-input:not(:placeholder-shown)) > .btn-continue {
+  /* Scoped to demo-complete so the CTA doesn't flash during the typing demo. */
+  body.demo-complete .prompt-area:has(.prompt-input:not(:placeholder-shown)) > .btn-continue {
     opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
     pointer-events: auto;
+  }
+  /* Press feedback — specificity matches the reveal selector so it wins. */
+  .prompt-area:has(.prompt-input:not(:placeholder-shown)) > .btn-continue:active {
+    transform: translateY(0.5px);
   }
 
   /* ---------- Iteration divider ---------- */
@@ -402,41 +460,263 @@
     width: auto;
   }
 
-  /* ---------- Intro sequence (main screen only) ----------
-     Staggered, overlapping fades. Each step starts before the previous
-     one finishes, with a slow ease-out so each fade feels graceful. */
+  /* ---------- Entrance choreography ----------
+     Sequential CSS-timed fade-ups for each element. The textarea typing demo
+     and ghost-drop are JS-orchestrated and insert themselves between the
+     action-line halves via class toggles. */
+
+  /* Intro gets its own slow, deliberate entrance — long travel, heavy blur,
+     and 1.8s so it reads as something announced rather than loaded. */
   .anim-intro {
-    opacity: 0;
     display: inline-block;
-    transform: translateY(40px);
-    animation: intro-show-hide 8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  .anim-action {
     opacity: 0;
+    transform: translateY(56px);
+    filter: blur(8px);
+    animation: intro-in 2400ms var(--ease-out) 0ms forwards;
+  }
+  @keyframes intro-in {
+    from { opacity: 0; transform: translateY(56px); filter: blur(8px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  }
+  /* action-a fades up on its own schedule — centered alone on line 2 until
+     action-b arrives. `vertical-align: bottom` so it baseline-aligns with
+     action-b (which has overflow:hidden and thus bottom-edge baseline). */
+  .anim-action-a {
     display: inline-block;
-    transform: translateY(40px);
-    animation: fade-up 1.5s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
-  }
-  .anim-rest {
+    vertical-align: bottom;
     opacity: 0;
-    transform: translateY(40px);
-    animation: fade-up 1.5s cubic-bezier(0.16, 1, 0.3, 1) 1.6s forwards;
+    transform: translateY(28px);
+    filter: blur(6px);
+    animation: fade-up-small 2400ms var(--ease-out) 2050ms forwards;
   }
+
+  /* action-b reveals with a combined motion:
+      – Outer span's max-width animates from 0 → full width, which grows the
+        line's total inline width. `text-align: center` on .heading then
+        re-centers the line, so action-a visibly slides to the left.
+      – Inner span translates from translateX(28px) → 0 and fades in, so
+        its text content appears to slide into the opening space from the
+        right — pushing action-a aside. */
+  .anim-action-b {
+    display: inline-block;
+    vertical-align: bottom;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: inherit;
+    /* Gentler ease-out-quint curve so the layout re-centering (which is what
+       pushes action-a leftward) doesn't snap at the start. */
+    transition: max-width 2400ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .anim-action-b-text {
+    display: inline-block;
+    vertical-align: bottom;
+    opacity: 0;
+    transform: translateX(36px);
+    /* More front-loaded curve on the translate so it arrives faster and
+       doesn't drag a long near-imperceptible tail. Opacity keeps the
+       gentler curve so the fade still feels slow and premium. */
+    transition: opacity 2400ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 1400ms cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  body.show-action-b .anim-action-b { max-width: 360px; }
+  body.show-action-b .anim-action-b-text {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Prompt box fades up alongside action-a — same start, same duration, so
+     line 2's headline and the box beneath it arrive as a paired gesture. */
   .anim-rest-2 {
     opacity: 0;
     transform: translateY(40px);
-    animation: fade-up 1.5s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards;
+    animation: fade-up 2400ms var(--ease-out) 2050ms forwards;
   }
 
-  @keyframes fade-up {
-    from { opacity: 0; transform: translateY(40px); }
-    to   { opacity: 1; transform: translateY(0); }
+  /* Intro fades out after the demo finishes — chained via an `intro-out`
+     animation so it cleanly takes over from the fade-up animation's held end state. */
+  body.demo-complete .anim-intro {
+    animation: intro-out 1100ms var(--ease-out) forwards;
   }
-  @keyframes intro-show-hide {
-    0%   { opacity: 0; transform: translateY(40px); }  /* 0s   — start below */
-    19%  { opacity: 1; transform: translateY(0); }     /* 1.5s — in place */
-    50%  { opacity: 1; transform: translateY(0); }     /* 4s   — still visible */
-    100% { opacity: 0; transform: translateY(0); }     /* 8s   — fade out, no drift */
+  .prompt {
+    transition: box-shadow var(--dur-reveal) var(--ease-out);
+  }
+
+  /* Toolbar + ticker hidden pre-demo; revealed when body.demo-complete lands. */
+  .toolbar-above {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 550ms var(--ease-out), transform 550ms var(--ease-out);
+  }
+  .ticker {
+    /* Existing .ticker rules remain; these add hidden-until-demo-complete state. */
+    opacity: 0;
+    transition: opacity 550ms var(--ease-out);
+  }
+  body.demo-complete .toolbar-above {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  body.demo-complete .ticker { opacity: 1; }
+
+  /* Intro stays visible once typed — the two-line heading is the resting state. */
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(40px); filter: blur(4px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  }
+  @keyframes fade-up-small {
+    from { opacity: 0; transform: translateY(14px); filter: blur(3px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  }
+  @keyframes intro-out {
+    from { opacity: 1; transform: translateY(0);   filter: blur(0); }
+    to   { opacity: 0; transform: translateY(-8px); filter: blur(3px); }
+  }
+
+  /* ---------- Drop demo: ghost file drifts into the box once on load ----------
+     Teaches the drop affordance by *showing* the gesture instead of labelling it.
+     Skipped if the user has already typed or is currently dragging a real file. */
+  .ghost-drop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 6px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .ghost-card {
+    position: relative;
+    width: 72px;
+    height: 92px;
+    border-radius: 8px;
+    border: 1.5px dashed rgba(26, 26, 26, 0.4);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow:
+      0 14px 32px -10px rgba(26, 26, 26, 0.25),
+      0 2px 4px rgba(26, 26, 26, 0.06);
+    opacity: 0;
+    transform: translateY(-40px) rotate(-5deg);
+    /* Animation fires when JS adds body.show-ghost — not CSS delay,
+       because the trigger point depends on when the headline finishes typing. */
+  }
+  body.show-ghost .ghost-card {
+    animation: ghost-drop 1500ms var(--ease-out) forwards;
+  }
+  /* Faint document lines inside the ghost, hinting "this is a file" */
+  .ghost-card::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 14px;
+    width: 44px;
+    height: 3px;
+    background: rgba(26, 26, 26, 0.18);
+    border-radius: 2px;
+    box-shadow:
+      0 12px 0 rgba(26, 26, 26, 0.18),
+      0 24px 0 rgba(26, 26, 26, 0.14),
+      0 36px 0 rgba(26, 26, 26, 0.10);
+  }
+  @keyframes ghost-drop {
+    0%   { opacity: 0; transform: translateY(-52px) rotate(-6deg) scale(1); }
+    60%  { opacity: 1; transform: translateY(44px)  rotate(0deg)  scale(1); }
+    100% { opacity: 0; transform: translateY(50px)  rotate(0deg)  scale(0.92); }
+  }
+  /* Inner dashed border expands as the ghost enters, stays expanded while the
+     file is visible, and relaxes as the ghost fades out (1400ms duration +
+     100ms delay = ends at 1500ms, matching the ghost-drop animation length). */
+  body.show-ghost .prompt-inner {
+    animation: drop-pulse 1400ms var(--ease-out) 100ms 1;
+    transform-origin: center;
+  }
+  @keyframes drop-pulse {
+    /* scaleX and scaleY tuned separately so the inner frame grows by a
+       similar absolute pixel amount on both axes — a uniform scale() on a
+       580×220 box expands horizontally ~2.6× more than vertically.
+       Now slightly larger, with an undershoot on the return so it "snaps back". */
+    0%   { border-color: rgba(26, 26, 26, 0.2);   transform: scale(1,     1);     border-radius: 12px; }
+    15%  { border-color: rgba(26, 26, 26, 0.55);  transform: scale(1.017, 1.045); border-radius: 15px; }
+    75%  { border-color: rgba(26, 26, 26, 0.55);  transform: scale(1.017, 1.045); border-radius: 15px; }
+    90%  { border-color: rgba(26, 26, 26, 0.25);  transform: scale(0.993, 0.982); border-radius: 12px; }
+    100% { border-color: rgba(26, 26, 26, 0.2);   transform: scale(1,     1);     border-radius: 12px; }
+  }
+  /* Suppress the ghost visually when the user engages, WITHOUT resetting
+     its animation timeline — CSS animations restart when a parent flips
+     from display:none back to visible, which would break the wall-clock
+     choreography. Opacity + pointer-events hides it but keeps it ticking. */
+  .ghost-drop {
+    transition: opacity 180ms var(--ease-out);
+  }
+  body.is-dragging .ghost-drop,
+  .prompt-area:has(.prompt-input:not(:placeholder-shown)) .ghost-drop {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ---------- Drag-over state: the box claims the screen ---------- */
+  .drop-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 12px;
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+    z-index: 4;
+  }
+  body.is-dragging .drop-label {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  body.is-dragging .prompt-inner {
+    border-color: rgba(26, 26, 26, 0.55);
+    background: rgba(250, 250, 252, 0.7);
+  }
+  body.is-dragging .prompt {
+    box-shadow:
+      0 0 0 0.75px var(--border-brand),
+      0 0 0 5px rgba(26, 26, 26, 0.14),
+      0 0 0 1px var(--shadow-drop-2),
+      0 1px 2px 0 var(--shadow-drop-2),
+      0 10px 28px -4px rgba(26, 26, 26, 0.18),
+      0 24px 40px -16px var(--shadow-drop-2),
+      inset 0 0 0 1px var(--shadow-inner-1);
+  }
+  body.is-dragging .ticker            { opacity: 0.12; }
+  body.is-dragging .custom-placeholder { opacity: 0; }
+
+  /* Respect reduced-motion preference: skip the whole choreographed demo —
+     land straight in the complete state with text filled and everything shown. */
+  @media (prefers-reduced-motion: reduce) {
+    .anim-rest-2 {
+      animation: none;
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+    .toolbar-above, .ticker {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    body.show-ghost .ghost-card { animation: none; opacity: 0; }
+    body.show-ghost .prompt-inner { animation: none; }
+    .btn-continue:hover .cta-arrow { animation: none; }
+    .ticker-track { animation: none; }
   }
 </style>
 </head>
@@ -456,23 +736,22 @@
           </button>
         </div>
 
-        <!-- Heading -->
+        <!-- Heading — intro fades in (CSS). action-a fades in (CSS). action-b
+             uses a nested wrapper: outer clips with animated max-width so line 2
+             grows and re-centers (pushing action-a left); inner translates from
+             the right while fading, producing the "pushed in from right" feel. -->
         <div class="heading-block">
-          <p class="heading"><span class="muted anim-intro">Let's create your first presentation</span><br><span class="anim-action">Describe your deck, or upload a file</span></p>
+          <p class="heading"><span class="muted anim-intro">Dhruv, let's build your first presentation</span><br><span class="anim-action-a">Describe your deck</span><span class="anim-action-b"><span class="anim-action-b-text">, or upload a file</span></span></p>
         </div>
 
         <!-- Toolbar above the prompt box -->
-        <div class="toolbar-above anim-rest">
+        <div class="toolbar-above">
           <div class="toolbar-left">
             <button type="button" class="btn">
               <span class="leading-icon">
                 <svg viewBox="0 0 16 16" fill="none">
-                  <g class="upload-bracket">
-                    <path d="M3 10V12C3 12.5523 3.44772 13 4 13H12C12.5523 13 13 12.5523 13 12V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </g>
-                  <g class="upload-arrow">
-                    <path d="M8 10V3M8 3L5 6M8 3L11 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </g>
+                  <path d="M3 10V12C3 12.5523 3.44772 13 4 13H12C12.5523 13 13 12.5523 13 12V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 10V3M8 3L5 6M8 3L11 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </span>
               <span>Upload Files</span>
@@ -532,17 +811,22 @@
                 </div>
                 <div class="placeholder-line">
                   <svg viewBox="0 0 20 20" fill="none" width="20" height="20">
-                    <g class="upload-bracket">
-                      <path d="M4 13v2.5C4 16.3 4.7 17 5.5 17h9c0.8 0 1.5-0.7 1.5-1.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </g>
-                    <g class="upload-arrow">
-                      <path d="M10 13V3M10 3L6.5 6.5M10 3L13.5 6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </g>
+                    <path d="M4 13v2.5C4 16.3 4.7 17 5.5 17h9c0.8 0 1.5-0.7 1.5-1.5V13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 13V3M10 3L6.5 6.5M10 3L13.5 6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                   <span>drop in a file</span>
                 </div>
               </div>
-              <textarea class="prompt-input" placeholder=" " rows="2" autofocus></textarea>
+              <textarea class="prompt-input" placeholder=" " rows="2" autofocus readonly></textarea>
+
+              <!-- Drop-to-upload label: fades in over the box while a file is being dragged over the window. -->
+              <div class="drop-label" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
+                  <path d="M4 13v2.5C4 16.3 4.7 17 5.5 17h9c0.8 0 1.5-0.7 1.5-1.5V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 13V3M10 3L6.5 6.5M10 3L13.5 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Drop to upload</span>
+              </div>
 
               <div class="ticker ticker-bottom">
                 <div class="ticker-track">
@@ -555,6 +839,11 @@
                 </div>
               </div>
 
+            </div>
+
+            <!-- Ghost-drop demo: a dashed file card drifts into the box once on load. -->
+            <div class="ghost-drop" aria-hidden="true">
+              <div class="ghost-card"></div>
             </div>
           </div>
 
@@ -574,5 +863,111 @@
     </div>
 
   </div>
+
+  <script>
+    // Choreography orchestrator. Intro + prompt-box + action-a all fade in
+    // via CSS animation-delays. JS only drives the beats that need to wait
+    // for user-visible state to complete:
+    //   1. Wait for action-a to finish fading in.
+    //   2. Run textarea typing demo: type SAMPLE, hold, delete.
+    //   3. Toggle body.show-action-b → action-b pushes in from the right,
+    //      line 2 grows and action-a slides left as the line re-centers.
+    //   4. Trigger ghost-drop via body.show-ghost.
+    //   5. body.demo-complete → toolbar + ticker fade in, intro fades out.
+    //
+    // Abort uses `input` with `e.isTrusted` — synthetic inputs from setValue()
+    // are isTrusted:false so they don't self-abort. Keydown is deliberately
+    // not a trigger so stray keypresses don't kill the demo.
+    (function () {
+      const ta = document.querySelector('.prompt-input');
+      if (!ta) return;
+
+      const SAMPLE       = 'Series D fundraising deck for my space tourism startup';
+      const START_DELAY  = 2450;   // starts as action-a begins fading in
+      const SPEED_TYPE   = 24;   // 54 chars × 24ms ≈ 1.3s
+      const HOLD         = 500;
+      const SPEED_DELETE = 15;
+
+      let aborted = false;
+      const abort = e => { if (!e || e.isTrusted) aborted = true; };
+      ta.addEventListener('input', abort);
+      ta.addEventListener('pointerdown', abort);
+      window.addEventListener('dragenter', e => {
+        if (e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files')) abort();
+      });
+
+      const wait = ms => new Promise(r => setTimeout(r, ms));
+      const setValue = v => {
+        ta.value = v;
+        ta.dispatchEvent(new Event('input', { bubbles: true }));
+      };
+      const finish = () => {
+        document.body.classList.add('show-action-b', 'show-ghost', 'demo-complete');
+        ta.removeAttribute('readonly');
+      };
+
+      (async () => {
+        await wait(START_DELAY);
+        if (aborted) return finish();
+
+        // Textarea typing demo
+        for (let i = 1; i <= SAMPLE.length; i++) {
+          if (aborted) return finish();
+          setValue(SAMPLE.slice(0, i));
+          await wait(SPEED_TYPE);
+        }
+        await wait(HOLD);
+        for (let i = SAMPLE.length - 1; i >= 0; i--) {
+          if (aborted) return finish();
+          setValue(SAMPLE.slice(0, i));
+          await wait(SPEED_DELETE);
+        }
+        if (aborted) return finish();
+
+        // Action-b pushes in from the right; action-a slides left.
+        await wait(240);
+        document.body.classList.add('show-action-b');
+        await wait(500);
+
+        // Ghost-drop
+        document.body.classList.add('show-ghost');
+        await wait(1600);
+
+        // Reveal toolbar + ticker, fade intro out, unlock the textarea.
+        document.body.classList.add('demo-complete');
+        ta.removeAttribute('readonly');
+      })();
+    })();
+
+    // Drag-over state: toggles body.is-dragging while a real file is dragged
+    // over the window. The dragenter/leave counter handles the jitter caused
+    // by those events firing for every child element.
+    (function () {
+      let depth = 0;
+      const body = document.body;
+      const hasFiles = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files');
+
+      window.addEventListener('dragenter', e => {
+        if (!hasFiles(e)) return;
+        e.preventDefault();
+        depth++;
+        if (depth === 1) body.classList.add('is-dragging');
+      });
+      window.addEventListener('dragleave', e => {
+        if (!hasFiles(e)) return;
+        depth = Math.max(0, depth - 1);
+        if (depth === 0) body.classList.remove('is-dragging');
+      });
+      window.addEventListener('dragover', e => {
+        if (!hasFiles(e)) return;
+        e.preventDefault();
+      });
+      window.addEventListener('drop', e => {
+        e.preventDefault();
+        depth = 0;
+        body.classList.remove('is-dragging');
+      });
+    })();
+  </script>
 </body>
 </html>
