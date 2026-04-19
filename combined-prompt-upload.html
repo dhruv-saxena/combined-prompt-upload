@@ -121,16 +121,19 @@
   /* ---------- Ticker (sample prompts) ---------- */
   .ticker {
     width: 100%;
+    /* overflow: hidden clips at the padding edge — vertical padding gives
+       the -3° hover-tilt room so rotated pill corners don't get cut off. */
     overflow: hidden;
+    padding: 8px 0;
     mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
     opacity: 0;
     transition: opacity 550ms var(--ease-out);
   }
-  /* Ticker recedes once the user commits to typing, so the CTA owns the eye.
+  /* Ticker vanishes once the user commits to typing, so the CTA owns the eye.
      Scoped to .demo-complete so it doesn't fight the pre-demo hidden state. */
   body.demo-complete .prompt-inner:has(.prompt-input:not(:placeholder-shown)) .ticker {
-    opacity: 0.4;
+    opacity: 0;
   }
   .ticker-track {
     display: inline-flex;
@@ -163,11 +166,11 @@
                 transform var(--dur-quick) var(--ease-out);
   }
   .pill:hover {
-    border-color: rgba(26, 26, 26, 0.3);
-    box-shadow: 0 2px 6px -1px rgba(26, 26, 26, 0.08);
-    transform: translateY(-1px);
+    border-color: rgba(26, 26, 26, 0.55);
+    box-shadow: 0 4px 10px -2px rgba(26, 26, 26, 0.12);
+    transform: translateY(-1px) rotate(-2deg);
   }
-  .pill:active { transform: translateY(0); }
+  .pill:active { transform: translateY(0) rotate(-2deg); }
   .pill:focus-visible {
     outline: 2px solid #171717;
     outline-offset: 2px;
@@ -253,8 +256,12 @@
   .prompt-inner:has(.prompt-input:not(:placeholder-shown)) .custom-placeholder {
     opacity: 0;
   }
-  .btn-continue:hover .cta-arrow {
-    animation: cta-arrow-nudge 1.1s ease-in-out infinite;
+  /* The arrow path extends to x=16 inside a 0 0 20 20 viewBox, so the +5px
+     nudge clips at the viewBox edge unless we opt out of SVG overflow clipping. */
+  .btn-continue .trailing-icon svg { overflow: visible; }
+  /* Arrow nudges continuously once the button is revealed (not hover-gated). */
+  body.demo-complete .prompt-area:has(.prompt-input:not(:placeholder-shown)) > .btn-continue .cta-arrow {
+    animation: cta-arrow-nudge 2s ease-in-out infinite;
   }
   @keyframes cta-arrow-nudge {
     0%, 100% { transform: translateX(0); }
@@ -366,7 +373,9 @@
   }
   .ticker-bottom {
     position: absolute;
-    bottom: 12px;
+    /* 4px + 8px padding-bottom = 12px from the inner frame bottom, same
+       visual position as before we added vertical padding. */
+    bottom: 4px;
     left: 12px;
     right: 12px;
     width: auto;
